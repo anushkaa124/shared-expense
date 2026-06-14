@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int            @id @default(autoincrement())
+  name             String
+  email            String         @unique
+  password         String
+  createdAt        DateTime       @default(now())
+  memberships      GroupMember[]
+  paidExpenses     Expense[]      @relation("PaidBy")
+  splits           ExpenseSplit[]
+  sentPayments     Settlement[]   @relation("Payer")
+  receivedPayments Settlement[]   @relation("Receiver")
+}
+
+model Group {
+  id          Int           @id @default(autoincrement())
+  name        String
+  createdAt   DateTime      @default(now())
+  members     GroupMember[]
+  expenses    Expense[]
+  settlements Settlement[]
+}
+
+model GroupMember {
+  id       Int       @id @default(autoincrement())
+  group    Group     @relation(fields: [groupId], references: [id])
+  groupId  Int
+  user     User      @relation(fields: [userId], references: [id])
+  userId   Int
+  joinedAt DateTime
+  leftAt   DateTime?
+
+  @@unique([groupId, userId])
+}
+
+model Expense {
+  id           Int            @id @default(autoincrement())
+  group        Group          @relation(fields: [groupId], references: [id])
+  groupId      Int
+  description  String
+  amount       Float
+  currency     String         @default("INR")
+  amountInINR  Float
+  date         DateTime
+  paidBy       User           @relation("PaidBy", fields: [paidById], references: [id])
+  paidById     Int
+  splitType    String
+  splits       ExpenseSplit[]
+  isSettlement Boolean        @default(false)
+  importFlag   String?
+  createdAt    DateTime       @default(now())
+}
+
+model ExpenseSplit {
+  id        Int     @id @default(autoincrement())
+  expense   Expense @relation(fields: [expenseId], references: [id])
+  expenseId Int
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  amount    Float
+}
+
+model Settlement {
+  id         Int      @id @default(autoincrement())
+  group      Group    @relation(fields: [groupId], references: [id])
+  groupId    Int
+  payer      User     @relation("Payer", fields: [payerId], references: [id])
+  payerId    Int
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+  receiverId Int
+  amount     Float
+  date       DateTime
+  note       String?
+  createdAt  DateTime @default(now())
+}
+
+model ImportAnomaly {
+  id          Int      @id @default(autoincrement())
+  importBatch String
+  rowNumber   Int
+  rawData     String
+  issue       String
+  action      String
+  resolved    Boolean  @default(false)
+  resolvedBy  Int?
+  createdAt   DateTime @default(now())
+}
