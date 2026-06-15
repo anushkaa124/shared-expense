@@ -1,0 +1,30 @@
+IMPORT_REPORT
+Import Summary
+Metric	Value
+Total Rows Processed	50
+Successfully Imported	38
+Anomalies Detected	12
+Auto Fixed	4
+User Review Required	8
+ 
+⸻
+ 
+Detected Anomalies
+Row	Anomaly	Action Taken
+3	Unknown Member (Dev)	User created new member
+5	Ambiguous Date (10/03/2026)	User selected DD/MM/YYYY
+8	Missing Year (Mar 14)	User selected 2026
+12	Settlement Recorded as Expense	Reclassified as settlement
+16	Negative Amount	Marked as refund
+18	Missing Currency	User selected INR
+22	Invalid Split Type (PERCENTAGE)	Converted to PERCENT
+24	Percent Total = 110%	User normalized percentages
+29	Possible Duplicate	User discarded duplicate
+34	Post Departure Expense	User reviewed and approved
+41	Unknown Member in Split	User created member
+46	Zero Amount	User discarded row
+ 
+⸻
+ 
+Result
+All anomalies were either automatically corrected or resolved through the anomaly review workflow before final import.
