@@ -85,6 +85,7 @@ model Settlement {
 model ImportAnomaly {
   id          Int      @id @default(autoincrement())
   importBatch String
+  groupId      Int?
   rowNumber   Int
   rawData     String
   issue       String
