@@ -7,7 +7,7 @@ const app = express()
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://your-app-name.vercel.app'  // update after Vercel deploy
+    'https://shared-expense-pied.vercel.app'  // update after Vercel deploy
   ],
   credentials: true
 }))
