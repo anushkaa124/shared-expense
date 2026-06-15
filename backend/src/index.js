@@ -4,7 +4,13 @@ require('dotenv').config()
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://your-app-name.vercel.app'  // update after Vercel deploy
+  ],
+  credentials: true
+}))
 app.use(express.json())
 
 app.use('/api/auth',        require('./routes/auth'))
